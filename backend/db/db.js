@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('polling_db', 'polling_user', 'securepassword', {
+const sequelize = new Sequelize('Pollying', 'postgres', 'satyam2203', {
   host: 'localhost',
   dialect: 'postgres',
 });
