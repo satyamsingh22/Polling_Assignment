@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../db/db.js';
-
+import sequelize from '../db/db.js';  // Ensure correct path for your database setup
 
 const Poll = sequelize.define('Poll', {
   title: {
@@ -12,8 +11,8 @@ const Poll = sequelize.define('Poll', {
     allowNull: false,
   },
   votes: {
-    type: DataTypes.JSONB, // JSON object to track votes for each option
-    defaultValue: {},
+    type: DataTypes.JSONB,
+    defaultValue: {},  // Default empty object for votes
   },
 });
 

@@ -1,20 +1,32 @@
-import { producer } from "./kafka.js";
-// Function to send a vote to Kafka
+import { producer } from './kafka.js';
+
 export const sendVoteToKafka = async (pollId, option) => {
   try {
-    await producer.connect(); // Ensure producer is connected
+    // Connect to Kafka producer
+    await producer.connect();
+
+    // Create the message to be sent
+    const message = {
+      pollId,
+      option,
+    };
+
+    // Send message to Kafka topic 'votes'
     await producer.send({
-      topic: 'votes',
+      topic: 'votes',  // Ensure this is the correct Kafka topic
       messages: [
         {
-          value: JSON.stringify({ pollId, option }), // Send poll ID and option as message
+          value: JSON.stringify(message),  // Send the message as a stringified JSON
         },
       ],
     });
+
     console.log(`Vote for poll ${pollId} sent to Kafka`);
+
   } catch (error) {
     console.error('Failed to send vote to Kafka:', error);
   } finally {
-    await producer.disconnect(); // Clean up producer connection
+    // Disconnect after sending the message
+    await producer.disconnect();
   }
 };

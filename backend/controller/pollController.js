@@ -1,22 +1,22 @@
-import { producer } from '../kafka/kafka.js';
-import Poll from '../model/poll.js';
 import { sendVoteToKafka } from '../kafka/kafkaProducer.js';
+import Poll from '../model/poll.js';
 
 export const createPoll = async (req, res) => {
-    try {
-      const { title, options } = req.body;
-  
-      if (!title || !Array.isArray(options) || options.length < 2) {
-        return res.status(400).json({ error: 'Title and at least two options are required' });
-      }
-  
-      const poll = await Poll.create({ title, options, votes: {} });
-      res.status(201).json(poll);
-    } catch (error) {
-      console.error('Error creating poll:', error);
-      res.status(500).json({ error: 'Failed to create poll' });
+  try {
+    const { title, options } = req.body;
+
+    if (!title || !Array.isArray(options) || options.length < 2) {
+      return res.status(400).json({ error: 'Title and at least two options are required' });
     }
-  };
+
+    const poll = await Poll.create({ title, options, votes: {} });
+    res.status(201).json(poll);  // Respond with the created poll
+
+  } catch (error) {
+    console.error('Error creating poll:', error);
+    res.status(500).json({ error: 'Failed to create poll' });
+  }
+};
   
 
 export const votePoll = async (req, res) => {
