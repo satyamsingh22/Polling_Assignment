@@ -161,19 +161,30 @@ Follow these steps to install Kafka and Zookeeper manually:
      Db_DatabaseName=Pollying
      ```
 
-4. **Start PostgreSQL**
+6. **Start PostgreSQL**
    - Ensure PostgreSQL is running and the database is created.
 
-5. **Run Kafka and Zookeeper**
+7. **Start Zookeeper**
+  --Run the following command to start Zookeeper:
+ ```bash
+   bin/zookeeper-server-start.sh config/zookeeper.properties
+
+   ```
+8. **Start Kafka**
+  --Open a new terminal and navigate to the Kafka directory.
+  --Run the following command to start Kafka:
+ ```bash
+  bin/kafka-server-start.sh config/server.properties
+
+   ```
+
+
+8. **Run Kafka and Zookeeper**
    - Start Kafka and Zookeeper services. Default ports:
      - **Kafka**: `9092`
      - **Zookeeper**: `2181`
 
-1. Start the server:
 
-   ```bash
-   npm run server
-   ```
 
 ---
 
