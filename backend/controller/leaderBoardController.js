@@ -1,3 +1,5 @@
+import Poll from "../model/poll.js";
+
 export const getLeaderboard = async (req, res) => {
   try {
     const polls = await Poll.findAll();
