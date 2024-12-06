@@ -1,10 +1,10 @@
 import { consumer } from './kafka.js';
-import Poll from '../model/poll.js';  // Import Poll model to update vote counts
+import Poll from '../model/poll.js';  
 
 export const processVotes = async () => {
   // Connect the consumer to the Kafka broker
   await consumer.connect();
-  await consumer.subscribe({ topic: 'votes', fromBeginning: true });  // Subscribe to the 'votes' topic
+  await consumer.subscribe({ topic: 'votes', fromBeginning: true }); 
 
   // Run the consumer to process each incoming message
   consumer.run({
