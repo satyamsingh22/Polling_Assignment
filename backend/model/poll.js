@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../db/db.js';  // Ensure correct path for your database setup
+import sequelize from '../db/db.js';  
 
 const Poll = sequelize.define('Poll', {
   title: {
