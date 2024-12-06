@@ -1,4 +1,4 @@
-import Server from "socket.io"
+import {Server} from "socket.io"
 import Poll from "../model/poll.js"; 
 
 export const initializeWebSocket = (httpServer) => {
