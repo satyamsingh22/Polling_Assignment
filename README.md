@@ -199,7 +199,7 @@ Follow these steps to install Kafka and Zookeeper manually:
    - Join a poll by emitting the `join-poll` event with the poll ID.
 
 4. **Leaderboard**
-   - Retrieve the leaderboard with a GET request to `/api/v1/leaderboard`.
+   - Retrieve the leaderboard with a GET request to `/api/v1/leaderboard/leaderboard`.
 
 ---
 
