@@ -135,25 +135,23 @@ Follow these steps to install Kafka and Zookeeper manually:
 3. Set up the database credentials in the `.env` file or `sequelize` configuration.
 
 ### **3. Run the Backend Server:**
-1. Install Node.js dependencies:
+ 1. Clone the Repository
+   ```bash
+   git clone https://github.com/satyamsingh22/Polling_Assignment.git
+   cd backend
+   ```
+2. Install Node.js dependencies:
    ```bash
    npm install
    ```
-2. Start the backend server:
+3. Start the backend server:
    ```bash
    npm run server
    ```
    The server will run on `http://localhost:3000`.
 
 
-4. **Clone the Repository**
-   ```bash
-   git clone https://github.com/satyamsingh22/Polling_Assignment.git
-   cd backend
-   ```
-
-
-5. **Environment Variables**
+4. **Environment Variables**
    - Create a `.env` file in the root directory with the following variables:
      ```env
      Db_userName=postgres
@@ -161,16 +159,16 @@ Follow these steps to install Kafka and Zookeeper manually:
      Db_DatabaseName=Pollying
      ```
 
-6. **Start PostgreSQL**
+5. **Start PostgreSQL**
    - Ensure PostgreSQL is running and the database is created.
 
-7. **Start Zookeeper**
+6. **Start Zookeeper**
   - Run the following command to start Zookeeper:
  ```bash
    bin/zookeeper-server-start.sh config/zookeeper.properties
 
    ```
-8. **Start Kafka**
+7. **Start Kafka**
   - Open a new terminal and navigate to the Kafka directory.
   - Run the following command to start Kafka:
  ```bash
@@ -179,7 +177,7 @@ Follow these steps to install Kafka and Zookeeper manually:
    ```
 
 
-9. **Verify Kafka and Zookeeper**
+8. **Verify Kafka and Zookeeper**
    - Start Kafka and Zookeeper services. Default ports:
      - **Kafka**: `9092`
      - **Zookeeper**: `2181`
