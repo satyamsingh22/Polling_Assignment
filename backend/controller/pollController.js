@@ -24,23 +24,19 @@ export const votePoll = async (req, res) => {
     const { id } = req.params;
     const { option } = req.body;
 
-    // Check if the poll exists
     const poll = await Poll.findByPk(id);
     if (!poll) {
       return res.status(404).json({ error: 'Poll not found' });
     }
 
-    // Ensure the option is valid
     if (!poll.options.includes(option)) {
       return res.status(400).json({ error: 'Invalid poll option' });
     }
 
-    // Send vote to Kafka
     await sendVoteToKafka(id, option);
 
     res.status(200).json({ message: 'Vote sent for processing' });
   } catch (error) {
-    console.error('Failed to process vote:', error);
     res.status(500).json({ error: 'Failed to process vote' });
   }
 };
