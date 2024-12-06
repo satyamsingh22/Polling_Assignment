@@ -237,5 +237,9 @@ Follow these steps to install Kafka and Zookeeper manually:
 
 ---
 
+## Contributors
+
+Developed by Satyam Singh
+
 
 
