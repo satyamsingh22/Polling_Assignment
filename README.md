@@ -1,155 +1,241 @@
 
+# Polling System Backend with Kafka and WebSockets
+
+This project implements a high-concurrency polling system with real-time updates and a leaderboard feature. 
+It leverages Kafka for message handling, PostgreSQL for data storage, and WebSockets for real-time communication.
+
+---
+
+## Features
+
+1. **Poll Creation**
+   - Users can create polls with multiple options.
+   - Polls are stored in a PostgreSQL database.
+
+2. **Poll Participation**
+   - Users can vote on polls using the `/polls/{id}/vote` endpoint.
+   - Votes are sent to Kafka for processing and stored in the database.
+
+3. **Real-Time Updates**
+   - WebSockets provide real-time updates to connected users when new votes are registered.
+
+4. **Leaderboard**
+   - A global leaderboard ranks the most popular poll options in real-time.
+
+5. **Concurrency and Fault Tolerance**
+   - Kafka ensures high concurrency handling and reliability.
+   - Zookeeper is used to manage Kafka brokers.
+
+---
+
+## Technology Stack
+
+- **Backend Framework**: Node.js
+- **Message Broker**: Kafka (with Zookeeper)
+- **Database**: PostgreSQL
+- **Real-Time Updates**: WebSockets
+
+---
+
+## API Endpoints
+
+### Poll Endpoints
+
+1. **Create Poll**
+   - **POST** `/api/v1/poll/polls`
+   - **Request Body**:
+     ```json
+     {
+       "title": "Favorite Programming Language",
+       "options": ["JavaScript", "Python", "C++"]
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "id": 1,
+       "title": "Favorite Programming Language",
+       "options": ["JavaScript", "Python", "C++"],
+       "votes": {}
+     }
+     ```
+
+2. **Vote on Poll**
+   - **POST** `/api/v1/poll/polls/:id/vote`
+   - **Request Body**:
+     ```json
+     {
+       "option": "Python"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "message": "Vote sent for processing"
+     }
+     ```
+
+3. **Get Poll Results**
+   - **GET** `/api/v1/poll/polls/:id`
+   - **Response**:
+     ```json
+     {
+       "Python": 10,
+       "JavaScript": 5
+     }
+     ```
+
+### Leaderboard Endpoint
+
+- **GET** `/api/v1//api/v1/leaderboard/leaderboard`
+- **Response**:
+  ```json
+  [
+    {"option": "Python", "votes": 10},
+    {"option": "JavaScript", "votes": 8}
+  ]
+  ```
+
+---
+
+## Real-Time Updates
+
+- **WebSocket Port**: 3001
+  - The WebSocket server listens on port **3001** for client connections.
+  - Example WebSocket URL: `ws://localhost:3001`
+- **Join a Poll**: 
+  - Clients can join a poll using the `join-poll` event, passing the poll ID. 
+  - They will receive the current votes and subsequent updates in real time.
+- **Vote Updates**: 
+  - Whenever a vote is registered, connected clients will receive updates through the `poll-update` event.
+
+---
+
+## Prerequisites
+
+1. **Node.js** (v16 or above)
+2. **PostgreSQL** (configured with user credentials)
+3. **Kafka** and **Zookeeper** (set up and running on default ports).
+
+---
+
+## Setup Instructions
 
 
-Polling System with Kafka, Zookeeper, and Real-Time Features
-Project Overview
-This project is a high-performance polling system built with Node.js, Kafka, Zookeeper, PostgreSQL, and WebSockets. It allows users to create polls, cast votes, and see real-time updates and leaderboards dynamically. The architecture ensures scalability, fault tolerance, and no data loss even under high-concurrency scenarios.
 
-Features
-Poll Creation:
+### **1. Kafka Setup:**
+Follow these steps to install Kafka and Zookeeper manually:
+1. Download and install [Kafka](https://kafka.apache.org/downloads).
+2. Follow the instructions in the [Kafka Quickstart](https://kafka.apache.org/quickstart) to set up Kafka and Zookeeper locally.
+3. Ensure Kafka is running on port `9092` and Zookeeper on port `2181`.
 
-Users can create polls with multiple options, which are stored in a PostgreSQL database.
-Voting System:
+### **2. PostgreSQL Setup:**
+1. Install [PostgreSQL](https://www.postgresql.org/download/).
+2. Create a database named `polling_db` and a user with access to it.
+3. Set up the database credentials in the `.env` file or `sequelize` configuration.
 
-Votes are sent asynchronously to Kafka for processing, ensuring resiliency.
-Real-Time Updates:
+### **3. Run the Backend Server:**
+1. Install Node.js dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the backend server:
+   ```bash
+   npm run server
+   ```
+   The server will run on `http://localhost:3000`.
 
-Dynamic poll standings and leaderboard updates using WebSockets.
-Global Leaderboard:
 
-Tracks the most popular poll options across all active polls and updates live.
-Concurrency Handling:
+4. **Clone the Repository**
+   ```bash
+   git clone https://github.com/satyamsingh22/Polling_Assignment.git
+   cd backend
+   ```
 
-Kafka partitions ensure scalability for high-concurrency voting.
-Prerequisites
-Before starting, ensure the following tools are installed:
 
-Node.js (v18 or later)
-PostgreSQL
-Kafka and Zookeeper
-Project Setup
-Step 1: Clone the Repository
-bash
-Copy code
-git clone <repository-url>
-cd <repository-folder>
-Step 2: Configure Environment Variables
-Update the .env file or modify db.js directly for your setup.
+5. **Environment Variables**
+   - Create a `.env` file in the root directory with the following variables:
+     ```env
+     Db_userName=postgres
+     Db_password=your_password
+     Db_DatabaseName=Pollying
+     ```
 
-PostgreSQL Configuration:
-Username: postgres
-Password: satyam2203
-Database Name: Pollying
-Kafka and Zookeeper:
-Broker: localhost:9092
-Step 3: Start Services
-PostgreSQL
-Start PostgreSQL and create a database named Pollying.
-Ensure the credentials match the configuration in db.js.
-Kafka and Zookeeper
-Start Zookeeper:
-bash
-Copy code
-zookeeper-server-start.sh /path-to/zookeeper.properties
-Start Kafka:
-bash
-Copy code
-kafka-server-start.sh /path-to/server.properties
-Starting the Application
-1. Install Dependencies
-bash
-Copy code
-npm install
-2. Run the Backend Server
-bash
-Copy code
-npm run server
-This will start:
+4. **Start PostgreSQL**
+   - Ensure PostgreSQL is running and the database is created.
 
-REST API services on http://localhost:3000
-WebSocket services on ws://localhost:3001
-3. Kafka Producer and Consumer
-Kafka setup automatically initializes:
+5. **Run Kafka and Zookeeper**
+   - Start Kafka and Zookeeper services. Default ports:
+     - **Kafka**: `9092`
+     - **Zookeeper**: `2181`
 
-Producer: Sends votes to the votes topic.
-Consumer: Processes messages and updates poll standings in the database.
-API Endpoints
-Poll Management
-Create Poll: POST /api/v1/poll/polls
+6. **Start the Application**
+   - Server:
+     ```bash
+    npm run server
+     ```
 
-Request Body:
-json
-Copy code
-{
-  "title": "Favorite Programming Language?",
-  "options": ["JavaScript", "Python", "Java"]
-}
-View Poll Results: GET /api/v1/poll/polls/:id
+---
 
-Voting
-Vote for a Poll: POST /api/v1/poll/polls/:id/vote
-Request Body:
-json
-Copy code
-{
-  "option": "JavaScript"
-}
-Leaderboard
-Global Leaderboard: GET /api/v1/leaderboard/leaderboard
-Real-Time Updates
-WebSocket Features
-Join Poll Room:
+## Testing
 
-Clients can subscribe to a specific poll room using:
-javascript
-Copy code
-socket.emit('join-poll', pollId);
-Receive Updates:
+1. **Poll Creation**
+   - Use tools like Postman to send a POST request to `/api/v1/poll/polls`.
 
-Updates are pushed live when new votes are processed.
-Kafka Instructions
-Testing Kafka Producer
-Create a topic:
-bash
-Copy code
-kafka-topics --create --topic votes --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-Produce test messages:
-bash
-Copy code
-kafka-console-producer --topic votes --bootstrap-server localhost:9092
-Testing Kafka Consumer
-Consume messages from the votes topic:
-bash
-Copy code
-kafka-console-consumer --topic votes --bootstrap-server localhost:9092 --from-beginning
-Troubleshooting
-Database Connection Issues:
+2. **Vote on Poll**
+   - Submit a vote via POST `/api/v1/poll/polls/:id/vote`.
 
-Verify PostgreSQL is running.
-Check credentials in db.js.
-Kafka/Zookeeper Errors:
+3. **Check Real-Time Updates**
+   - Open a WebSocket client and connect to `ws://localhost:3001`.
+   - Join a poll by emitting the `join-poll` event with the poll ID.
 
-Ensure both services are running:
-bash
-Copy code
-ps aux | grep kafka
-ps aux | grep zookeeper
-WebSocket Not Responding:
+4. **Leaderboard**
+   - Retrieve the leaderboard with a GET request to `/api/v1/leaderboard`.
 
-Ensure WebSocket server is running and logs show no errors.
-Testing Checklist
-Real-Time Updates:
+---
 
-Use WebSocket clients to verify dynamic poll and leaderboard updates.
-Kafka Message Flow:
+## Troubleshooting
 
-Produce and consume test messages to ensure proper communication.
-API Functionality:
+1. **Kafka Connection Issues**
+   - Ensure Kafka and Zookeeper services are running.
+   - Verify Kafka broker configurations in the code.
 
-Validate all API endpoints using Postman or similar tools.
-Future Enhancements
-Add retry logic for Kafka message failures.
-Extend WebSocket features for user notifications.
-Include stress tests for high-concurrency scenarios.
-Contributors
-Developed by [Your Name].
+2. **Database Connectivity**
+   - Check PostgreSQL credentials in the `.env` file.
+   - Ensure the database server is running.
+
+3. **WebSocket Errors**
+   - Verify the WebSocket server is running on port `3001`.
+   - Use browser developer tools or tools like Postman to debug WebSocket connections.
+
+4. **Missing Votes**
+   - Check Kafka consumer logs for unprocessed messages.
+   - Ensure Kafka topics are configured correctly.
+
+---
+
+## Future Enhancements
+
+1. **User Authentication**
+   - Add authentication to secure poll creation and voting endpoints.
+
+2. **Poll Expiry**
+   - Implement a feature to set expiry times for polls.
+
+3. **Result Analysis**
+   - Provide detailed analytics for poll creators.
+
+4. **Scalability**
+   - Explore distributed databases for better scalability with high data loads.
+
+---
+
+## Notes
+
+- Ensure Kafka and Zookeeper are set up correctly for message processing.
+- Error handling is implemented for invalid poll IDs, options, and missing fields.
+
+---
+
+
+
