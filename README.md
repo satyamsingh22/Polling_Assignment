@@ -169,10 +169,10 @@ Follow these steps to install Kafka and Zookeeper manually:
      - **Kafka**: `9092`
      - **Zookeeper**: `2181`
 
-6. **Start the Application**
-   - Server:
-       ```bash
-  npm run server
+1. Start the server:
+
+   ```bash
+   npm run server
    ```
 
 ---
